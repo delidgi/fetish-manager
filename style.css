@@ -1,0 +1,261 @@
+/**
+ * ST-Fetish-Manager Styles
+ */
+
+/* Панель */
+.fetish-panel {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    width: 320px;
+    max-height: 80vh;
+    background: var(--SmartThemeBlurTintColor, rgba(25, 25, 25, 0.95));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
+    border-radius: 12px;
+    z-index: 99999;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.fetish-panel.hidden {
+    display: none;
+}
+
+/* Хедер */
+.fetish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: linear-gradient(135deg, rgba(180, 50, 80, 0.3), rgba(120, 40, 60, 0.2));
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+}
+
+.fetish-header h4 {
+    margin: 0;
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 1em;
+}
+
+.fetish-minimize-btn {
+    background: none;
+    border: none;
+    color: var(--SmartThemeBodyColor, #fff);
+    cursor: pointer;
+    padding: 5px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.fetish-minimize-btn:hover {
+    opacity: 1;
+}
+
+/* Контролы */
+.fetish-controls {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fetish-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.fetish-intensity,
+.fetish-chance {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 0.85em;
+}
+
+.fetish-intensity select,
+.fetish-chance input {
+    flex: 1;
+    background: var(--SmartThemeBlurTintColor, rgba(40, 40, 40, 0.8));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.2));
+    border-radius: 4px;
+    color: var(--SmartThemeBodyColor, #fff);
+    padding: 4px 8px;
+}
+
+/* Активные фетиши */
+.fetish-active {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+}
+
+.active-header {
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 0.85em;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+.active-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 28px;
+}
+
+.active-fetish-tag {
+    background: linear-gradient(135deg, rgba(180, 50, 80, 0.6), rgba(140, 40, 60, 0.5));
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.active-fetish-tag:hover {
+    background: linear-gradient(135deg, rgba(200, 60, 90, 0.8), rgba(160, 50, 70, 0.7));
+}
+
+.no-fetishes {
+    color: var(--SmartThemeBodyColor, #fff);
+    opacity: 0.5;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+/* Категории */
+.fetish-categories {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.fetish-category {
+    margin-bottom: 12px;
+}
+
+.category-header {
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.2));
+}
+
+.category-fetishes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+/* Кнопки фетишей */
+.fetish-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 50, 0.7));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
+    border-radius: 6px;
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 0.75em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fetish-btn:hover {
+    background: var(--SmartThemeBorderColor, rgba(80, 80, 80, 0.8));
+    transform: translateY(-1px);
+}
+
+.fetish-btn.active {
+    background: linear-gradient(135deg, rgba(180, 50, 80, 0.7), rgba(140, 40, 60, 0.6));
+    border-color: rgba(220, 80, 110, 0.6);
+    box-shadow: 0 0 10px rgba(180, 50, 80, 0.4);
+}
+
+.fetish-icon {
+    font-size: 1.1em;
+}
+
+.fetish-name {
+    white-space: nowrap;
+}
+
+/* Кнопка очистки */
+.fetish-clear-btn {
+    margin: 10px 15px;
+    padding: 8px;
+    background: rgba(80, 30, 30, 0.6);
+    border: 1px solid rgba(150, 50, 50, 0.4);
+    border-radius: 6px;
+    color: var(--SmartThemeBodyColor, #fff);
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fetish-clear-btn:hover {
+    background: rgba(120, 40, 40, 0.8);
+}
+
+/* Мини-кнопка */
+.fetish-mini-btn {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(180, 50, 80, 0.9), rgba(140, 40, 60, 0.8));
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 99999;
+    box-shadow: 0 4px 15px rgba(180, 50, 80, 0.5);
+    transition: transform 0.2s;
+}
+
+.fetish-mini-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Скроллбар */
+.fetish-categories::-webkit-scrollbar {
+    width: 4px;
+}
+
+.fetish-categories::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.fetish-categories::-webkit-scrollbar-thumb {
+    background: rgba(180, 50, 80, 0.5);
+    border-radius: 2px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 480px) {
+    .fetish-panel {
+        width: calc(100vw - 20px);
+        right: 10px;
+        left: 10px;
+        max-height: 70vh;
+    }
+    
+    .fetish-btn {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+}
