@@ -24,7 +24,7 @@ const FETISHES = {
         impact: { name: "Шлепки", icon: "✋", cat: "body", prompt: `{{char}} enjoys spanking and impact play.` },
         groping: { name: "Лапанье", icon: "🤲", cat: "body", prompt: `{{char}} constantly touches partner possessively.` },
         size_diff: { name: "Размеры", icon: "📏", cat: "body", prompt: `{{char}} aroused by size difference with partner.` },
-        breasts: { name: "Грудь", icon: "🍈", cat: "body", prompt: `{{char}} obsessed with breasts.` },
+        breasts: { name: "Грудь", icon: "🍈", cat: "body", prompt: `{{char}} obsessed with big breasts.` },
         foot: { name: "Футфетиш", icon: "🦶", cat: "body", prompt: `{{char}} aroused by feet.` },
         blood: { name: "Кровь", icon: "🩸", cat: "body", prompt: `{{char}} aroused by sight of blood.` },
         pregnancy: { name: "Беременность", icon: "🤰", cat: "body", prompt: `{{char}} aroused by pregnancy.` },
