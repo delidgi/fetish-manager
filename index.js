@@ -119,7 +119,6 @@ function renderCustomList() {
     }
 }
 
-// HTML
 function buildCategoriesHtml() {
     let html = '';
     for (const [ck, c] of Object.entries(CATEGORIES)) {
@@ -138,47 +137,37 @@ const panelHtml = `
         <h4 id="fm-drag-handle">🔥 Fetish Manager</h4>
         <button id="fm-minimize" class="fm-minimize-btn"><i class="fa-solid fa-minus"></i></button>
     </div>
-    <div class="fm-controls">
-        <label><input type="checkbox" id="fm-enabled" checked> Включено</label>
-        <div class="fm-row">
-            <span>Сила:</span>
-            <select id="fm-intensity">
-                <option value="low">Слабо</option>
-                <option value="medium" selected>Средне</option>
-                <option value="high">Сильно</option>
-            </select>
+    <div class="fm-scrollable">
+        <div class="fm-controls">
+            <label><input type="checkbox" id="fm-enabled" checked> Включено</label>
+            <div class="fm-row">
+                <span>Сила:</span>
+                <select id="fm-intensity">
+                    <option value="low">Слабо</option>
+                    <option value="medium" selected>Средне</option>
+                    <option value="high">Сильно</option>
+                </select>
+            </div>
+            <div class="fm-row">
+                <span>Шанс: <b id="fm-chance-val">70</b>%</span>
+                <input type="range" id="fm-chance" min="10" max="100" value="70" step="10">
+            </div>
         </div>
-        <div class="fm-row">
-            <span>Шанс: <b id="fm-chance-val">70</b>%</span>
-            <input type="range" id="fm-chance" min="10" max="100" value="70" step="10">
+        <div class="fm-active-section">
+            <div class="fm-section-header">Активные:</div>
+            <div id="fm-active-display"><em>Не выбрано</em></div>
         </div>
-    </div>
-    <div class="fm-active-section">
-        <div class="fm-section-header">Активные:</div>
-        <div id="fm-active-display"><em>Не выбрано</em></div>
-    </div>
-    <div class="fm-custom-section">
-        <div class="fm-section-header">
-            <span>Кастомные:</span>
-            <button id="fm-add-custom" class="fm-add-btn">+ Добавить</button>
+        <div class="fm-custom-section">
+            <div class="fm-section-header">
+                <span>Кастомные:</span>
+                <button id="fm-add-custom" class="fm-add-btn">+ Добавить</button>
+            </div>
+            <div id="fm-custom-list"><em>Нет кастомных</em></div>
         </div>
-        <div id="fm-custom-list"><em>Нет кастомных</em></div>
+        <div class="fm-categories" id="fm-categories"></div>
     </div>
-    <div class="fm-categories" id="fm-categories"></div>
     <div class="fm-footer">
         <button id="fm-clear" class="fm-clear-btn">🗑️ Очистить</button>
-    </div>
-</div>
-
-<div id="fm-modal" class="fm-modal">
-    <div class="fm-modal-content">
-        <h4>➕ Новый фетиш</h4>
-        <input type="text" id="fm-new-name" placeholder="Название" maxlength="30">
-        <textarea id="fm-new-prompt" placeholder="Описание для AI (например: {{char}} enjoys...)"></textarea>
-        <div class="fm-modal-btns">
-            <button id="fm-modal-cancel" class="fm-modal-cancel">Отмена</button>
-            <button id="fm-modal-save" class="fm-modal-save">Сохранить</button>
-        </div>
     </div>
 </div>
 
@@ -186,29 +175,23 @@ const panelHtml = `
 `;
 
 const panelStyles = `
-/* МИНИ-КНОПКА - ВСЕГДА ВИДНА */
 .fm-mini-btn {
-    position: fixed !important;
-    z-index: 99999 !important;
+    position: fixed;
+    z-index: 99999;
     top: 120px;
     right: 15px;
     width: 50px;
     height: 50px;
-    background: var(--SmartThemeBlurTintColor, rgba(139, 58, 74, 0.95)) !important;
-    border: 2px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.6)) !important;
+    background: var(--SmartThemeBlurTintColor, rgba(139, 58, 74, 0.95));
+    border: 2px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.6));
     border-radius: 50%;
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--SmartThemeBodyColor, #fff) !important;
+    color: var(--SmartThemeBodyColor, #fff);
     font-size: 1.4em;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.fm-mini-btn:hover {
-    background: var(--SmartThemeBorderColor, rgba(180, 70, 90, 1)) !important;
-    transform: scale(1.1);
 }
 
 .fm-mini-btn .fm-count {
@@ -223,32 +206,27 @@ const panelStyles = `
     font-weight: bold;
 }
 
-/* ОСНОВНАЯ ПАНЕЛЬ */
 .fm-container {
-    position: fixed !important;
-    z-index: 99999 !important;
+    position: fixed;
+    z-index: 99999;
     top: 50px;
     right: 15px;
     width: 280px;
-    max-width: calc(100vw - 30px);
-    max-height: 75vh;
-    background: var(--SmartThemeBlurTintColor, rgba(25, 25, 30, 0.97)) !important;
-    border: 1px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.5)) !important;
+    max-height: 70vh;
+    background: var(--SmartThemeBlurTintColor, rgba(25, 25, 30, 0.97));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.5));
     border-radius: 10px;
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 13px;
-    color: var(--SmartThemeBodyColor, #eee) !important;
+    color: var(--SmartThemeBodyColor, #eee);
     overflow: hidden;
 }
 
-.fm-container.fm-hidden {
-    display: none !important;
-}
+.fm-container.fm-hidden { display: none; }
 
-/* HEADER */
 .fm-header {
     display: flex;
     justify-content: space-between;
@@ -256,7 +234,6 @@ const panelStyles = `
     padding: 10px 12px;
     background: linear-gradient(135deg, rgba(139, 58, 74, 0.6), rgba(90, 35, 50, 0.4));
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
 }
 
 .fm-header h4 {
@@ -278,18 +255,18 @@ const panelStyles = `
     opacity: 0.7;
 }
 
-.fm-minimize-btn:hover {
-    opacity: 1;
+.fm-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* CONTROLS */
 .fm-controls {
     padding: 10px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex-shrink: 0;
 }
 
 .fm-row {
@@ -314,13 +291,9 @@ const panelStyles = `
     margin-right: 5px;
 }
 
-/* ACTIVE SECTION */
 .fm-active-section {
     padding: 8px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
-    max-height: 80px;
-    overflow-y: auto;
 }
 
 .fm-section-header {
@@ -345,18 +318,9 @@ const panelStyles = `
     cursor: pointer;
 }
 
-.fm-tag:hover {
-    background: rgba(180, 70, 90, 1);
-}
-
-/* CUSTOM SECTION - ИСПРАВЛЕНО */
 .fm-custom-section {
     padding: 8px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
-    max-height: 150px;
-    display: flex;
-    flex-direction: column;
 }
 
 .fm-custom-section .fm-section-header {
@@ -364,7 +328,6 @@ const panelStyles = `
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
-    flex-shrink: 0;
 }
 
 .fm-add-btn {
@@ -377,17 +340,10 @@ const panelStyles = `
     cursor: pointer;
 }
 
-.fm-add-btn:hover {
-    background: rgba(60, 140, 60, 1);
-}
-
 #fm-custom-list {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    overflow-y: auto;
-    flex: 1;
-    -webkit-overflow-scrolling: touch;
 }
 
 .fm-custom-item {
@@ -399,16 +355,13 @@ const panelStyles = `
     border-radius: 6px;
     font-size: 12px;
     cursor: pointer;
-    flex-shrink: 0;
 }
 
 .fm-custom-item.fm-custom-active {
     background: linear-gradient(135deg, rgba(139, 58, 74, 0.8), rgba(100, 40, 55, 0.7));
 }
 
-.fm-custom-name {
-    flex: 1;
-}
+.fm-custom-name { flex: 1; }
 
 .fm-custom-del {
     opacity: 0.5;
@@ -416,22 +369,11 @@ const panelStyles = `
     cursor: pointer;
 }
 
-.fm-custom-del:hover {
-    opacity: 1;
-}
-
-/* CATEGORIES */
 .fm-categories {
-    flex: 1;
-    overflow-y: auto;
     padding: 8px 12px;
-    -webkit-overflow-scrolling: touch;
-    min-height: 0;
 }
 
-.fm-category {
-    margin-bottom: 12px;
-}
+.fm-category { margin-bottom: 12px; }
 
 .fm-cat-header {
     font-size: 12px;
@@ -456,26 +398,18 @@ const panelStyles = `
     color: var(--SmartThemeBodyColor, #ddd);
     font-size: 11px;
     cursor: pointer;
-    transition: all 0.15s ease;
-}
-
-.fm-fetish-btn:hover {
-    background: var(--SmartThemeBorderColor, rgba(70, 70, 80, 0.9));
-    transform: translateY(-1px);
 }
 
 .fm-fetish-btn.fm-active {
-    background: linear-gradient(135deg, rgba(139, 58, 74, 0.9), rgba(100, 40, 55, 0.8)) !important;
-    border-color: rgba(200, 80, 100, 0.6) !important;
-    color: #fff !important;
+    background: linear-gradient(135deg, rgba(139, 58, 74, 0.9), rgba(100, 40, 55, 0.8));
+    border-color: rgba(200, 80, 100, 0.6);
+    color: #fff;
     box-shadow: 0 0 10px rgba(139, 58, 74, 0.4);
 }
 
-/* FOOTER */
 .fm-footer {
     padding: 8px 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
 }
 
 .fm-clear-btn {
@@ -489,150 +423,10 @@ const panelStyles = `
     font-size: 12px;
 }
 
-.fm-clear-btn:hover {
-    background: rgba(100, 40, 40, 1);
-}
-
-/* MODAL - ИСПРАВЛЕНО ДЛЯ МОБИЛЬНЫХ */
-.fm-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    background: rgba(0, 0, 0, 0.85) !important;
-    z-index: 100001 !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 15px !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    overflow: auto !important;
-    -webkit-overflow-scrolling: touch;
-}
-
-.fm-modal.fm-modal-open {
-    display: flex !important;
-}
-
-.fm-modal-content {
-    background: var(--SmartThemeBlurTintColor, rgba(30, 30, 35, 0.98)) !important;
-    border: 1px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.5)) !important;
-    border-radius: 12px !important;
-    padding: 20px !important;
-    width: 100% !important;
-    max-width: 320px !important;
-    max-height: calc(100vh - 40px) !important;
-    overflow-y: auto !important;
-    color: var(--SmartThemeBodyColor, #eee) !important;
-    box-sizing: border-box !important;
-    margin: auto !important;
-    position: relative !important;
-    -webkit-overflow-scrolling: touch;
-}
-
-.fm-modal-content h4 {
-    margin: 0 0 15px 0;
-    font-size: 16px;
-    text-align: center;
-}
-
-.fm-modal-content input,
-.fm-modal-content textarea {
-    width: 100%;
-    background: rgba(50, 50, 60, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    font-size: 14px;
-    box-sizing: border-box;
-    -webkit-appearance: none;
-}
-
-.fm-modal-content textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.fm-modal-btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.fm-modal-btns button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    min-height: 44px;
-}
-
-.fm-modal-save {
-    background: rgba(50, 130, 50, 0.9);
-    color: #fff;
-}
-
-.fm-modal-save:hover,
-.fm-modal-save:active {
-    background: rgba(60, 150, 60, 1);
-}
-
-.fm-modal-cancel {
-    background: rgba(70, 70, 80, 0.9);
-    color: #fff;
-}
-
-.fm-modal-cancel:hover,
-.fm-modal-cancel:active {
-    background: rgba(90, 90, 100, 1);
-}
-
-/* SCROLLBAR */
-.fm-categories::-webkit-scrollbar,
-#fm-custom-list::-webkit-scrollbar,
-.fm-active-section::-webkit-scrollbar,
-.fm-modal-content::-webkit-scrollbar {
-    width: 4px;
-}
-
-.fm-categories::-webkit-scrollbar-thumb,
-#fm-custom-list::-webkit-scrollbar-thumb,
-.fm-active-section::-webkit-scrollbar-thumb,
-.fm-modal-content::-webkit-scrollbar-thumb {
+.fm-scrollable::-webkit-scrollbar { width: 4px; }
+.fm-scrollable::-webkit-scrollbar-thumb {
     background: rgba(139, 58, 74, 0.5);
     border-radius: 2px;
-}
-
-/* МОБИЛЬНАЯ АДАПТАЦИЯ */
-@media (max-width: 480px) {
-    .fm-container {
-        top: 10px !important;
-        right: 10px !important;
-        left: 10px !important;
-        width: auto !important;
-        max-height: 80vh !important;
-    }
-    
-    .fm-modal {
-        padding: 10px !important;
-    }
-    
-    .fm-modal-content {
-        padding: 15px !important;
-        max-height: calc(100vh - 30px) !important;
-    }
-    
-    .fm-custom-section {
-        max-height: 120px;
-    }
 }
 `;
 
@@ -641,30 +435,22 @@ jQuery(async () => {
         load();
         
         $('<style>').html(panelStyles).appendTo('head');
-
         $('body').append(panelHtml);
         $('#fm-categories').html(buildCategoriesHtml());
         
         const $panel = $('#fm-panel');
         const $miniBtn = $('#fm-mini-btn');
-        const $minimizeBtn = $('#fm-minimize');
-        
 
         $miniBtn.on('click touchend', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            if ($panel.hasClass('fm-hidden')) {
-                $panel.removeClass('fm-hidden');
-            } else {
-                $panel.addClass('fm-hidden');
-            }
+            $panel.toggleClass('fm-hidden');
         });
         
-        $minimizeBtn.on('click touchend', function(e) {
+        $('#fm-minimize').on('click touchend', function(e) {
             e.preventDefault();
             $panel.addClass('fm-hidden');
         });
-        
 
         $('#fm-enabled').prop('checked', state.enabled).on('change', function() {
             state.enabled = this.checked;
@@ -686,19 +472,16 @@ jQuery(async () => {
             apply();
             save();
         });
-        
 
         $(document).on('click touchend', '.fm-fetish-btn', function(e) {
             e.preventDefault();
             toggle($(this).data('key'));
         });
-        
 
         $(document).on('click touchend', '.fm-tag', function(e) {
             e.preventDefault();
             toggle($(this).data('key'));
         });
-        
 
         $('#fm-clear').on('click touchend', function(e) {
             e.preventDefault();
@@ -708,55 +491,33 @@ jQuery(async () => {
             save();
             notify('Очищено');
         });
-        
 
-        const $modal = $('#fm-modal');
-        
-
+        // Добавление кастомного - через prompt вместо модалки
         $('#fm-add-custom').on('click touchend', function(e) {
             e.preventDefault();
-            $('#fm-new-name').val('');
-            $('#fm-new-prompt').val('');
-            $modal.addClass('fm-modal-open');
-            // Прокручиваем страницу наверх чтобы модалка была видна
-            window.scrollTo(0, 0);
+            const name = prompt('Название фетиша:');
+            if (!name || !name.trim()) return;
+            
+            const desc = prompt('Описание для AI (например: {{char}} enjoys...):');
+            if (!desc || !desc.trim()) return;
+            
+            const id = 'custom_' + Date.now();
+            state.custom.push({ 
+                id, 
+                name: name.trim(), 
+                icon: '🔹', 
+                prompt: `[FETISH: ${name.trim()}] ${desc.trim()}` 
+            });
+            save();
+            updateUI();
+            notify(`+ ${name.trim()}`);
         });
-        
-
-        $('#fm-modal-cancel').on('click touchend', function(e) {
-            e.preventDefault();
-            $modal.removeClass('fm-modal-open');
-        });
-        
-
-        $('#fm-modal-save').on('click touchend', function(e) {
-            e.preventDefault();
-            const name = $('#fm-new-name').val().trim();
-            const prompt = $('#fm-new-prompt').val().trim();
-            if (name && prompt) {
-                const id = 'custom_' + Date.now();
-                state.custom.push({ id, name, icon: '🔹', prompt: `[FETISH: ${name}] ${prompt}` });
-                save();
-                updateUI();
-                $modal.removeClass('fm-modal-open');
-                notify(`+ ${name}`);
-            } else {
-                notify('Заполни оба поля');
-            }
-        });
-        
-
-        $modal.on('click touchend', function(e) {
-            if (e.target === this) $modal.removeClass('fm-modal-open');
-        });
-        
 
         $(document).on('click touchend', '.fm-custom-name', function(e) {
             e.preventDefault();
             const id = $(this).closest('.fm-custom-item').data('id');
             toggle(id);
         });
-        
 
         $(document).on('click touchend', '.fm-custom-del', function(e) {
             e.preventDefault();
@@ -769,8 +530,8 @@ jQuery(async () => {
             apply();
             notify('Удалён');
         });
-        
 
+        // Драг панели
         const $handle = $('#fm-drag-handle');
         let isDragging = false;
         let offset = { x: 0, y: 0 };
@@ -800,8 +561,8 @@ jQuery(async () => {
         $(document).on('mouseup touchend', function() {
             isDragging = false;
         });
-        
 
+        // Драг мини-кнопки
         let isMiniDragging = false;
         let miniOffset = { x: 0, y: 0 };
         
@@ -829,7 +590,7 @@ jQuery(async () => {
         updateUI();
         apply();
         
-        console.log('[Fetish Manager] v9 Ready!');
+        console.log('[Fetish Manager] v10 Ready!');
         
     } catch (error) {
         console.error('[Fetish Manager] Error:', error);
