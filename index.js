@@ -61,7 +61,7 @@ function buildPrompt() {
 }
 
 function apply() {
-    setExtensionPrompt(extensionName, buildPrompt(), extension_prompt_types.IN_CHAT, 0, true, false, null, extension_prompt_roles.SYSTEM);
+    setExtensionPrompt(extensionName, buildPrompt(), extension_prompt_types.IN_PROMPT, 1000, true, false, null, extension_prompt_roles.SYSTEM);
 }
 
 function notify(msg) {
@@ -492,7 +492,6 @@ jQuery(async () => {
             notify('Очищено');
         });
 
-        // Добавление кастомного - через prompt вместо модалки
         $('#fm-add-custom').on('click touchend', function(e) {
             e.preventDefault();
             const name = prompt('Название фетиша:');
@@ -531,7 +530,6 @@ jQuery(async () => {
             notify('Удалён');
         });
 
-        // Драг панели
         const $handle = $('#fm-drag-handle');
         let isDragging = false;
         let offset = { x: 0, y: 0 };
@@ -562,7 +560,6 @@ jQuery(async () => {
             isDragging = false;
         });
 
-        // Драг мини-кнопки
         let isMiniDragging = false;
         let miniOffset = { x: 0, y: 0 };
         
