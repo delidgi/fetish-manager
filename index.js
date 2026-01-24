@@ -1,4 +1,4 @@
-import { setExtensionPrompt, extension_prompt_types, extension_prompt_roles } from '../../../../script.js';
+import { setExtensionPrompt, extension_prompt_types, eventSource, event_types } from '../../../../script.js';
 
 const extensionName = 'fetish-manager';
 
@@ -51,17 +51,56 @@ function save() { localStorage.setItem('fm', JSON.stringify(state)); }
 
 function buildPrompt() {
     if (!state.enabled || !state.active.length) return '';
-    let p = `[FETISH SYSTEM: ${state.intensity}, ${state.chance}%]\n`;
+    
+    const intensityMap = {
+        low: 'очень лёгкие намёки, едва заметно',
+        medium: 'умеренно, естественно вплетать',
+        high: 'ярко выражено, акцент на фетише'
+    };
+    
+    let fetishList = [];
     state.active.forEach(k => {
-        if (FETISHES[k]) p += FETISHES[k].prompt + '\n';
+        if (FETISHES[k]) fetishList.push(FETISHES[k].prompt);
         const c = state.custom.find(f => f.id === k);
-        if (c) p += c.prompt + '\n';
+        if (c) fetishList.push(c.prompt);
     });
+    
+    // РЕАЛЬНЫЙ рандом на стороне JS!
+    const roll = Math.floor(Math.random() * 100) + 1;
+    const triggered = roll <= state.chance;
+    
+    // Выбираем случайный фетиш из активных
+    const randomFetishKey = state.active[Math.floor(Math.random() * state.active.length)];
+    const randomFetish = FETISHES[randomFetishKey] || state.custom.find(f => f.id === randomFetishKey);
+    
+    let p = `[OOC: 🔥 FETISH SYSTEM]
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎲 БРОСОК: ${roll} из 100 (порог: ${state.chance}%)
+${triggered ? `✅ СРАБОТАЛО! Фетиш этого ответа: ${randomFetish?.icon || '🔹'} ${randomFetish?.name || randomFetishKey}` : `❌ НЕ СРАБОТАЛО — пиши ВАНИЛЬНО (без фетишей)`}
+
+⚙️ Интенсивность: ${state.intensity} (${intensityMap[state.intensity]})
+
+📋 ВСЕ АКТИВНЫЕ ФЕТИШИ (для справки):
+${fetishList.join('\n')}
+
+📜 ПРАВИЛА:
+${triggered 
+    ? `• Интегрируй "${randomFetish?.name || randomFetishKey}" ЕСТЕСТВЕННО в сцену
+• НЕ объявляй фетиш словами, просто покажи через действия/диалог
+• Если контекст неподходящий (не интим) — добавь лёгкий намёк или отложи`
+    : `• Пиши ВАНИЛЬНУЮ сцену БЕЗ явных фетишей
+• Можно добавить ОЧЕНЬ лёгкий намёк, но не более
+• НЕ ФОРСЬ фетиши — бросок не прошёл!`}
+━━━━━━━━━━━━━━━━━━━━━━━━━━]
+`;
     return p;
 }
 
 function apply() {
-    setExtensionPrompt(extensionName, buildPrompt(), extension_prompt_types.IN_PROMPT, 1000, true, false, null, extension_prompt_roles.SYSTEM);
+    const prompt = buildPrompt();
+    // IN_CHAT = ближе к сообщениям, лучше видно AI
+    setExtensionPrompt(extensionName, prompt, extension_prompt_types.IN_CHAT, 0);
+    console.log('[Fetish Manager] Prompt applied:', prompt ? 'YES' : 'empty');
 }
 
 function notify(msg) {
@@ -587,7 +626,13 @@ jQuery(async () => {
         updateUI();
         apply();
         
-        console.log('[Fetish Manager] v10 Ready!');
+        // Обновляем промпт (с новым броском) перед каждым сообщением пользователя
+        eventSource.on(event_types.MESSAGE_SENT, () => {
+            console.log('[Fetish Manager] New roll before AI response...');
+            apply();
+        });
+        
+        console.log('[Fetish Manager] v11 Ready!');
         
     } catch (error) {
         console.error('[Fetish Manager] Error:', error);
