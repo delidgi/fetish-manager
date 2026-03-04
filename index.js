@@ -3,88 +3,86 @@ import { setExtensionPrompt, extension_prompt_types, eventSource, event_types } 
 const extensionName = 'fetish-manager';
 
 const FETISHES = {
-    bdsm: { name: "БДСМ", icon: "⛓️", cat: "power", prompt: `[FETISH: BDSM] {{char}} has interest in BDSM.` },
-    domination: { name: "Доминация", icon: "👑", cat: "power", prompt: `[FETISH: Domination] {{char}} takes control.` },
-    masochism: { name: "Мазохизм", icon: "🔥", cat: "power", prompt: `[FETISH: Masochism] {{char}} enjoys pain.` },
-    bondage: { name: "Бондаж", icon: "🪢", cat: "power", prompt: `[FETISH: Bondage] {{char}} enjoys restraints.` },
-    brat_taming: { name: "Приручение", icon: "😈", cat: "power", prompt: `[FETISH: Brat Taming] {{char}} provokes punishment.` },
-    freeuse: { name: "Freeuse", icon: "🔓", cat: "power", prompt: `[FETISH: Free Use] {{char}} available anytime.` },
-    humiliation: { name: "Унижение", icon: "😳", cat: "psych", prompt: `[FETISH: Humiliation] {{char}} enjoys degradation.` },
-    praise: { name: "Похвала", icon: "✨", cat: "psych", prompt: `[FETISH: Praise] {{char}} loves praise.` },
-    money: { name: "Фин.Доминирование", icon: "💵", cat: "psych", prompt: `[FETISH: Financial dominance] {{char}} derives profound sexual and psychological pleasure from financially dominating their partner, which includes the mandatory purchase of expensive gifts, jewelry, or property. They must insist on the partner accepting large sums of money or having full financial reliance on them. The act of "gifting" is a core element of sexual arousal and control` },
-    daddy: { name: "Папочка", icon: "🎩", cat: "psych", prompt: `[FETISH: Daddy] {{char}} enjoys daddy role.` },
-    lactation: { name: "Лактация", icon: "🍼", cat: "psych", prompt: `[FETISH: Lactation] {{char}} has a lactation fetish and focuses on breast milk and nursing.` },
-    pregnancy: { name: "Беременность", icon: "🤰", cat: "psych", prompt: `[FETISH: Pregnancy] {{char}} has a pregnancy fetish and focuses on the state of being pregnant and gravidity.` },
-    corruption: { name: "Развращение", icon: "🍎", cat: "psych", prompt: `[FETISH: Corruption] {{char}} corrupts innocence.` },
-    public: { name: "Публичный", icon: "🏙️", cat: "risk", prompt: `[FETISH: Public] {{char}} enjoys public intimacy.` },
-    risk: { name: "Риск", icon: "👀", cat: "risk", prompt: `[FETISH: Risk] {{char}} craves discovery risk.` },
-    voyeurism: { name: "Вуайеризм", icon: "🔭", cat: "risk", prompt: `[FETISH: Voyeurism] {{char}} watches others.` },
-    anal: { name: "Анал", icon: "🍑", cat: "body", prompt: `[FETISH: Anal] {{char}} enjoys anal.` },
-    hair: { name: "Волосы", icon: "👩🏻‍🦳", cat: "body", prompt: `[FETISH: Long hair] {{char}} loves long hair on girls.` },
-    impact: { name: "Шлепки", icon: "✋", cat: "body", prompt: `[FETISH: Impact] {{char}} enjoys spanking.` },
-    groping: { name: "Лапанье", icon: "🤲", cat: "body", prompt: `[FETISH: Groping] {{char}} touches constantly.` },
-    breasts: { name: "Грудь", icon: "🍈", cat: "body", prompt: `[FETISH: Breasts] {{char}} obsessed with big breasts.` },
-    foot: { name: "Ноги", icon: "🦶", cat: "body", prompt: `[FETISH: Foot] {{char}} enjoys feet.` },
-    blindfold: { name: "Повязка", icon: "🙈", cat: "sense", prompt: `[FETISH: Blindfold] {{char}} enjoys blindfolds.` },
-    mirror: { name: "Зеркала", icon: "🪞", cat: "sense", prompt: `[FETISH: Mirror] {{char}} watches in mirrors.` },
-    toys: { name: "Игрушки", icon: "🎀", cat: "sense", prompt: `[FETISH: Toys] {{char}} uses toys.` },
-    roleplay: { name: "Ролеплей", icon: "🎭", cat: "sense", prompt: `[FETISH: Roleplay] {{char}} enjoys roles.` },
-    petplay: { name: "Петплей", icon: "🐾", cat: "sense", prompt: `[FETISH: Petplay] {{char}} enjoys pet play.` },
-    aftercare: { name: "Aftercare", icon: "🫂", cat: "rel", prompt: `[FETISH: Aftercare] {{char}} gives aftercare.` },
-    dirty_talk: { name: "Dirty Talk", icon: "🗣️", cat: "rel", prompt: `[FETISH: Dirty Talk] {{char}} talks dirty.` },
-    worship: { name: "Поклонение", icon: "🛐", cat: "rel", prompt: `[FETISH: Worship] {{char}} worships partner.` }
+    bdsm: { name: "БДСМ", icon: "fa-solid fa-link", cat: "power", prompt: `[FETISH: BDSM] {{char}} has interest in BDSM.` },
+    domination: { name: "Доминация", icon: "fa-solid fa-crown", cat: "power", prompt: `[FETISH: Domination] {{char}} takes control.` },
+    masochism: { name: "Мазохизм", icon: "fa-solid fa-fire", cat: "power", prompt: `[FETISH: Masochism] {{char}} enjoys pain.` },
+    bondage: { name: "Бондаж", icon: "fa-solid fa-hands-bound", cat: "power", prompt: `[FETISH: Bondage] {{char}} enjoys restraints.` },
+    brat_taming: { name: "Приручение", icon: "fa-solid fa-bolt", cat: "power", prompt: `[FETISH: Brat Taming] {{char}} provokes punishment.` },
+    freeuse: { name: "Freeuse", icon: "fa-solid fa-lock-open", cat: "power", prompt: `[FETISH: Free Use] {{char}} available anytime.` },
+    humiliation: { name: "Унижение", icon: "fa-solid fa-face-flushed", cat: "psych", prompt: `[FETISH: Humiliation] {{char}} enjoys degradation.` },
+    praise: { name: "Похвала", icon: "fa-solid fa-star", cat: "psych", prompt: `[FETISH: Praise] {{char}} loves praise.` },
+    money: { name: "Фин.Доминирование", icon: "fa-solid fa-money-bill-wave", cat: "psych", prompt: `[FETISH: Financial dominance] {{char}} derives profound sexual and psychological pleasure from financially dominating their partner, which includes the mandatory purchase of expensive gifts, jewelry, or property. They must insist on the partner accepting large sums of money or having full financial reliance on them. The act of "gifting" is a core element of sexual arousal and control` },
+    daddy: { name: "Папочка", icon: "fa-solid fa-user-tie", cat: "psych", prompt: `[FETISH: Daddy] {{char}} enjoys daddy role.` },
+    lactation: { name: "Лактация", icon: "fa-solid fa-droplet", cat: "psych", prompt: `[FETISH: Lactation] {{char}} has a lactation fetish and focuses on breast milk and nursing.` },
+    pregnancy: { name: "Беременность", icon: "fa-solid fa-person-pregnant", cat: "psych", prompt: `[FETISH: Pregnancy] {{char}} has a pregnancy fetish and focuses on the state of being pregnant and gravidity.` },
+    corruption: { name: "Развращение", icon: "fa-solid fa-apple-whole", cat: "psych", prompt: `[FETISH: Corruption] {{char}} corrupts innocence.` },
+    public: { name: "Публичный", icon: "fa-solid fa-city", cat: "risk", prompt: `[FETISH: Public] {{char}} enjoys public intimacy.` },
+    risk: { name: "Риск", icon: "fa-solid fa-eye", cat: "risk", prompt: `[FETISH: Risk] {{char}} craves discovery risk.` },
+    voyeurism: { name: "Вуайеризм", icon: "fa-solid fa-binoculars", cat: "risk", prompt: `[FETISH: Voyeurism] {{char}} watches others.` },
+    anal: { name: "Анал", icon: "fa-solid fa-peach", cat: "body", prompt: `[FETISH: Anal] {{char}} enjoys anal.` },
+    hair: { name: "Волосы", icon: "fa-solid fa-wand-magic-sparkles", cat: "body", prompt: `[FETISH: Long hair] {{char}} loves long hair on girls.` },
+    impact: { name: "Шлепки", icon: "fa-solid fa-hand", cat: "body", prompt: `[FETISH: Impact] {{char}} enjoys spanking.` },
+    groping: { name: "Лапанье", icon: "fa-solid fa-hands", cat: "body", prompt: `[FETISH: Groping] {{char}} touches constantly.` },
+    breasts: { name: "Грудь", icon: "fa-solid fa-lemon", cat: "body", prompt: `[FETISH: Breasts] {{char}} obsessed with big breasts.` },
+    foot: { name: "Ноги", icon: "fa-solid fa-socks", cat: "body", prompt: `[FETISH: Foot] {{char}} enjoys feet.` },
+    blindfold: { name: "Повязка", icon: "fa-solid fa-eye-slash", cat: "sense", prompt: `[FETISH: Blindfold] {{char}} enjoys blindfolds.` },
+    mirror: { name: "Зеркала", icon: "fa-solid fa-clone", cat: "sense", prompt: `[FETISH: Mirror] {{char}} watches in mirrors.` },
+    toys: { name: "Игрушки", icon: "fa-solid fa-ribbon", cat: "sense", prompt: `[FETISH: Toys] {{char}} uses toys.` },
+    roleplay: { name: "Ролеплей", icon: "fa-solid fa-masks-theater", cat: "sense", prompt: `[FETISH: Roleplay] {{char}} enjoys roles.` },
+    petplay: { name: "Петплей", icon: "fa-solid fa-paw", cat: "sense", prompt: `[FETISH: Petplay] {{char}} enjoys pet play.` },
+    aftercare: { name: "Aftercare", icon: "fa-solid fa-heart-pulse", cat: "rel", prompt: `[FETISH: Aftercare] {{char}} gives aftercare.` },
+    dirty_talk: { name: "Dirty Talk", icon: "fa-solid fa-comment-dots", cat: "rel", prompt: `[FETISH: Dirty Talk] {{char}} talks dirty.` },
+    worship: { name: "Поклонение", icon: "fa-solid fa-hand-holding-heart", cat: "rel", prompt: `[FETISH: Worship] {{char}} worships partner.` }
 };
 
 const CATEGORIES = {
-    power: { name: "Власть", icon: "⛓️" },
-    psych: { name: "Психология", icon: "🧠" },
-    risk: { name: "Риск", icon: "👀" },
-    body: { name: "Тело", icon: "💋" },
-    sense: { name: "Сенсорика", icon: "✨" },
-    rel: { name: "Отношения", icon: "💕" }
+    power: { name: "Власть", icon: "fa-solid fa-link" },
+    psych: { name: "Психология", icon: "fa-solid fa-brain" },
+    risk: { name: "Риск", icon: "fa-solid fa-eye" },
+    body: { name: "Тело", icon: "fa-solid fa-heart" },
+    sense: { name: "Сенсорика", icon: "fa-solid fa-wand-sparkles" },
+    rel: { name: "Отношения", icon: "fa-solid fa-heart-pulse" }
 };
 
-let state = { enabled: true, active: [], intensity: 'medium', chance: 70, custom: [] };
+let state = { enabled: true, active: [], intensity: 'medium', chance: 70, custom: [], showFloating: true };
 
 function load() { try { const s = localStorage.getItem('fm'); if(s) state = {...state, ...JSON.parse(s)}; } catch(e){} }
 function save() { localStorage.setItem('fm', JSON.stringify(state)); }
 
 function buildPrompt() {
     if (!state.enabled || !state.active.length) return '';
-    
+
     const intensityMap = {
         low: 'очень лёгкие намёки, едва заметно',
         medium: 'умеренно, естественно вплетать',
         high: 'ярко выражено, акцент на фетише'
     };
-    
+
     let fetishList = [];
     state.active.forEach(k => {
         if (FETISHES[k]) fetishList.push(FETISHES[k].prompt);
         const c = state.custom.find(f => f.id === k);
         if (c) fetishList.push(c.prompt);
     });
-    
-    // РЕАЛЬНЫЙ рандом на стороне JS!
+
     const roll = Math.floor(Math.random() * 100) + 1;
     const triggered = roll <= state.chance;
-    
-    // Выбираем случайный фетиш из активных
+
     const randomFetishKey = state.active[Math.floor(Math.random() * state.active.length)];
     const randomFetish = FETISHES[randomFetishKey] || state.custom.find(f => f.id === randomFetishKey);
-    
-    let p = `[OOC: 🔥 FETISH SYSTEM]
+
+    let p = `[OOC: FETISH SYSTEM]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎲 БРОСОК: ${roll} из 100 (порог: ${state.chance}%)
-${triggered ? `✅ СРАБОТАЛО! Фетиш этого ответа: ${randomFetish?.icon || '🔹'} ${randomFetish?.name || randomFetishKey}` : `❌ НЕ СРАБОТАЛО — пиши ВАНИЛЬНО (без фетишей)`}
+БРОСОК: ${roll} из 100 (порог: ${state.chance}%)
+${triggered ? `СРАБОТАЛО! Фетиш этого ответа: ${randomFetish?.name || randomFetishKey}` : `НЕ СРАБОТАЛО — пиши ВАНИЛЬНО (без фетишей)`}
 
-⚙️ Интенсивность: ${state.intensity} (${intensityMap[state.intensity]})
+Интенсивность: ${state.intensity} (${intensityMap[state.intensity]})
 
-📋 ВСЕ АКТИВНЫЕ ФЕТИШИ (для справки):
+ВСЕ АКТИВНЫЕ ФЕТИШИ (для справки):
 ${fetishList.join('\n')}
 
-📜 ПРАВИЛА:
-${triggered 
+ПРАВИЛА:
+${triggered
     ? `• Интегрируй "${randomFetish?.name || randomFetishKey}" ЕСТЕСТВЕННО в сцену
 • НЕ объявляй фетиш словами, просто покажи через действия/диалог
 • Если контекст неподходящий (не интим) — добавь лёгкий намёк или отложи`
@@ -98,7 +96,6 @@ ${triggered
 
 function apply() {
     const prompt = buildPrompt();
-    // IN_CHAT = ближе к сообщениям, лучше видно AI
     setExtensionPrompt(extensionName, prompt, extension_prompt_types.IN_CHAT, 0);
     console.log('[Fetish Manager] Prompt applied:', prompt ? 'YES' : 'empty');
 }
@@ -109,6 +106,10 @@ function notify(msg) {
     }
 }
 
+function faIcon(cls, extra = '') {
+    return `<i class="${cls}${extra ? ' ' + extra : ''}"></i>`;
+}
+
 function updateUI() {
     $('.fm-fetish-btn').each(function() {
         $(this).toggleClass('fm-active', state.active.includes($(this).data('key')));
@@ -117,12 +118,16 @@ function updateUI() {
         $(this).toggleClass('fm-custom-active', state.active.includes($(this).data('id')));
     });
     const count = state.active.length;
-    $('#fm-mini-btn').html(count > 0 ? `🔥<span class="fm-count">${count}</span>` : '🔥');
+    $('#fm-mini-btn').html(count > 0
+        ? `${faIcon('fa-solid fa-fire')}<span class="fm-count">${count}</span>`
+        : faIcon('fa-solid fa-fire'));
+    // Update extension panel button counter too
+    $('#fm-ext-count').text(count > 0 ? count : '');
     $('#fm-active-display').html(
-        count > 0 
+        count > 0
             ? state.active.map(k => {
                 const f = FETISHES[k] || state.custom.find(c => c.id === k);
-                return f ? `<span class="fm-tag" data-key="${k}">${f.icon || '🔹'} ${f.name} ✕</span>` : '';
+                return f ? `<span class="fm-tag" data-key="${k}">${faIcon(f.icon || 'fa-solid fa-circle')} ${f.name} <i class="fa-solid fa-xmark fm-tag-x"></i></span>` : '';
             }).join('')
             : '<em>Не выбрано</em>'
     );
@@ -134,7 +139,7 @@ function toggle(key) {
     const f = FETISHES[key] || state.custom.find(c => c.id === key);
     if (i < 0) {
         state.active.push(key);
-        notify(`${f?.icon || '🔹'} ${f?.name || key} +`);
+        notify(`${f?.name || key} +`);
     } else {
         state.active.splice(i, 1);
         notify(`${f?.name || key} −`);
@@ -151,8 +156,8 @@ function renderCustomList() {
     } else {
         $list.html(state.custom.map(f => `
             <div class="fm-custom-item ${state.active.includes(f.id) ? 'fm-custom-active' : ''}" data-id="${f.id}">
-                <span class="fm-custom-name">${f.icon || '🔹'} ${f.name}</span>
-                <span class="fm-custom-del" data-id="${f.id}">✕</span>
+                <span class="fm-custom-name">${faIcon(f.icon || 'fa-solid fa-circle')} ${f.name}</span>
+                <span class="fm-custom-del" data-id="${f.id}"><i class="fa-solid fa-xmark"></i></span>
             </div>
         `).join(''));
     }
@@ -163,22 +168,49 @@ function buildCategoriesHtml() {
     for (const [ck, c] of Object.entries(CATEGORIES)) {
         const btns = Object.entries(FETISHES)
             .filter(([_, f]) => f.cat === ck)
-            .map(([k, f]) => `<button class="fm-fetish-btn" data-key="${k}">${f.icon} ${f.name}</button>`)
+            .map(([k, f]) => `<button class="fm-fetish-btn" data-key="${k}">${faIcon(f.icon)} ${f.name}</button>`)
             .join('');
-        html += `<div class="fm-category"><div class="fm-cat-header">${c.icon} ${c.name}</div><div class="fm-cat-items">${btns}</div></div>`;
+        html += `<div class="fm-category"><div class="fm-cat-header">${faIcon(c.icon)} ${c.name}</div><div class="fm-cat-items">${btns}</div></div>`;
     }
     return html;
 }
 
+/* ── Extension panel settings HTML (inside #extensions_settings2) ── */
+const extSettingsHtml = `
+<div id="fm-ext-settings" class="fm-ext-block">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>Fetish Manager</b>
+            <span id="fm-ext-count" class="fm-ext-badge"></span>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <div class="fm-ext-row">
+                <label class="checkbox_label">
+                    <input type="checkbox" id="fm-ext-show-float">
+                    <span>Плавающая кнопка</span>
+                </label>
+            </div>
+            <div class="fm-ext-row">
+                <button id="fm-ext-open" class="menu_button">
+                    <i class="fa-solid fa-fire"></i> Открыть панель
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+/* ── Floating panel HTML ── */
 const panelHtml = `
 <div id="fm-panel" class="fm-container fm-hidden">
     <div class="fm-header">
-        <h4 id="fm-drag-handle">🔥 Fetish Manager</h4>
+        <h4 id="fm-drag-handle"><i class="fa-solid fa-fire"></i> Fetish Manager</h4>
         <button id="fm-minimize" class="fm-minimize-btn"><i class="fa-solid fa-minus"></i></button>
     </div>
     <div class="fm-scrollable">
         <div class="fm-controls">
-            <label><input type="checkbox" id="fm-enabled" checked> Включено</label>
+            <label class="checkbox_label"><input type="checkbox" id="fm-enabled" checked> Включено</label>
             <div class="fm-row">
                 <span>Сила:</span>
                 <select id="fm-intensity">
@@ -199,310 +231,75 @@ const panelHtml = `
         <div class="fm-custom-section">
             <div class="fm-section-header">
                 <span>Кастомные:</span>
-                <button id="fm-add-custom" class="fm-add-btn">+ Добавить</button>
+                <button id="fm-add-custom" class="fm-add-btn"><i class="fa-solid fa-plus"></i> Добавить</button>
             </div>
             <div id="fm-custom-list"><em>Нет кастомных</em></div>
         </div>
         <div class="fm-categories" id="fm-categories"></div>
     </div>
     <div class="fm-footer">
-        <button id="fm-clear" class="fm-clear-btn">🗑️ Очистить</button>
+        <button id="fm-clear" class="fm-clear-btn"><i class="fa-solid fa-trash-can"></i> Очистить</button>
     </div>
 </div>
 
-<div id="fm-mini-btn" class="fm-mini-btn">🔥</div>
-`;
-
-const panelStyles = `
-.fm-mini-btn {
-    position: fixed;
-    z-index: 99999;
-    top: 120px;
-    right: 15px;
-    width: 50px;
-    height: 50px;
-    background: var(--SmartThemeBlurTintColor, rgba(139, 58, 74, 0.95));
-    border: 2px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.6));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--SmartThemeBodyColor, #fff);
-    font-size: 1.4em;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.fm-mini-btn .fm-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #e74c3c;
-    color: white;
-    font-size: 11px;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-weight: bold;
-}
-
-.fm-container {
-    position: fixed;
-    z-index: 99999;
-    top: 50px;
-    right: 15px;
-    width: 280px;
-    max-height: 70vh;
-    background: var(--SmartThemeBlurTintColor, rgba(25, 25, 30, 0.97));
-    border: 1px solid var(--SmartThemeBorderColor, rgba(200, 100, 120, 0.5));
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 13px;
-    color: var(--SmartThemeBodyColor, #eee);
-    overflow: hidden;
-}
-
-.fm-container.fm-hidden { display: none; }
-
-.fm-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    background: linear-gradient(135deg, rgba(139, 58, 74, 0.6), rgba(90, 35, 50, 0.4));
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.fm-header h4 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: move;
-    flex-grow: 1;
-    text-align: center;
-}
-
-.fm-minimize-btn {
-    background: none;
-    border: none;
-    color: var(--SmartThemeBodyColor, #fff);
-    font-size: 16px;
-    cursor: pointer;
-    padding: 5px 8px;
-    opacity: 0.7;
-}
-
-.fm-scrollable {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.fm-controls {
-    padding: 10px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.fm-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.fm-controls select,
-.fm-controls input[type="range"] {
-    flex: 1;
-    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.9));
-    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.2));
-    color: var(--SmartThemeBodyColor, #fff);
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.fm-controls input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-}
-
-.fm-active-section {
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.fm-section-header {
-    font-size: 11px;
-    opacity: 0.6;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-}
-
-#fm-active-display {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    min-height: 24px;
-}
-
-.fm-tag {
-    background: rgba(139, 58, 74, 0.8);
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    cursor: pointer;
-}
-
-.fm-custom-section {
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.fm-custom-section .fm-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.fm-add-btn {
-    background: rgba(50, 120, 50, 0.8);
-    border: 1px solid rgba(80, 160, 80, 0.5);
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 11px;
-    cursor: pointer;
-}
-
-#fm-custom-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.fm-custom-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 10px;
-    background: rgba(50, 50, 60, 0.7);
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.fm-custom-item.fm-custom-active {
-    background: linear-gradient(135deg, rgba(139, 58, 74, 0.8), rgba(100, 40, 55, 0.7));
-}
-
-.fm-custom-name { flex: 1; }
-
-.fm-custom-del {
-    opacity: 0.5;
-    padding: 2px 6px;
-    cursor: pointer;
-}
-
-.fm-categories {
-    padding: 8px 12px;
-}
-
-.fm-category { margin-bottom: 12px; }
-
-.fm-cat-header {
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    opacity: 0.8;
-    padding-bottom: 3px;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
-}
-
-.fm-cat-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.fm-fetish-btn {
-    padding: 6px 9px;
-    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.8));
-    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
-    border-radius: 6px;
-    color: var(--SmartThemeBodyColor, #ddd);
-    font-size: 11px;
-    cursor: pointer;
-}
-
-.fm-fetish-btn.fm-active {
-    background: linear-gradient(135deg, rgba(139, 58, 74, 0.9), rgba(100, 40, 55, 0.8));
-    border-color: rgba(200, 80, 100, 0.6);
-    color: #fff;
-    box-shadow: 0 0 10px rgba(139, 58, 74, 0.4);
-}
-
-.fm-footer {
-    padding: 8px 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.fm-clear-btn {
-    width: 100%;
-    padding: 8px;
-    background: rgba(80, 30, 30, 0.8);
-    border: 1px solid rgba(150, 50, 50, 0.5);
-    border-radius: 6px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.fm-scrollable::-webkit-scrollbar { width: 4px; }
-.fm-scrollable::-webkit-scrollbar-thumb {
-    background: rgba(139, 58, 74, 0.5);
-    border-radius: 2px;
-}
+<div id="fm-mini-btn" class="fm-mini-btn"><i class="fa-solid fa-fire"></i></div>
 `;
 
 jQuery(async () => {
     try {
         load();
-        
-        $('<style>').html(panelStyles).appendTo('head');
+
         $('body').append(panelHtml);
+        $('#extensions_settings2').append(extSettingsHtml);
         $('#fm-categories').html(buildCategoriesHtml());
-        
+
         const $panel = $('#fm-panel');
         const $miniBtn = $('#fm-mini-btn');
 
+        /* ── Floating button visibility ── */
+        function applyFloatVisibility() {
+            $miniBtn.toggle(!!state.showFloating);
+        }
+        $('#fm-ext-show-float').prop('checked', state.showFloating).on('change', function() {
+            state.showFloating = this.checked;
+            applyFloatVisibility();
+            save();
+        });
+        applyFloatVisibility();
+
+        /* ── Open panel from extension settings ── */
+        $('#fm-ext-open').on('click', function(e) {
+            e.preventDefault();
+            $panel.removeClass('fm-hidden');
+        });
+
+        /* ── Floating mini button ── */
+        let miniClickAllowed = true;
         $miniBtn.on('click touchend', function(e) {
+            if (!miniClickAllowed) return;
             e.preventDefault();
             e.stopPropagation();
             $panel.toggleClass('fm-hidden');
         });
-        
+
         $('#fm-minimize').on('click touchend', function(e) {
             e.preventDefault();
             $panel.addClass('fm-hidden');
         });
 
+        /* ── Controls ── */
         $('#fm-enabled').prop('checked', state.enabled).on('change', function() {
             state.enabled = this.checked;
             apply();
             save();
         });
-        
+
         $('#fm-intensity').val(state.intensity).on('change', function() {
             state.intensity = this.value;
             apply();
             save();
         });
-        
+
         $('#fm-chance').val(state.chance);
         $('#fm-chance-val').text(state.chance);
         $('#fm-chance').on('input', function() {
@@ -512,6 +309,7 @@ jQuery(async () => {
             save();
         });
 
+        /* ── Fetish buttons ── */
         $(document).on('click touchend', '.fm-fetish-btn', function(e) {
             e.preventDefault();
             toggle($(this).data('key'));
@@ -531,20 +329,21 @@ jQuery(async () => {
             notify('Очищено');
         });
 
+        /* ── Custom fetishes ── */
         $('#fm-add-custom').on('click touchend', function(e) {
             e.preventDefault();
             const name = prompt('Название фетиша:');
             if (!name || !name.trim()) return;
-            
+
             const desc = prompt('Описание для AI (например: {{char}} enjoys...):');
             if (!desc || !desc.trim()) return;
-            
+
             const id = 'custom_' + Date.now();
-            state.custom.push({ 
-                id, 
-                name: name.trim(), 
-                icon: '🔹', 
-                prompt: `[FETISH: ${name.trim()}] ${desc.trim()}` 
+            state.custom.push({
+                id,
+                name: name.trim(),
+                icon: 'fa-solid fa-circle',
+                prompt: `[FETISH: ${name.trim()}] ${desc.trim()}`
             });
             save();
             updateUI();
@@ -569,17 +368,18 @@ jQuery(async () => {
             notify('Удалён');
         });
 
+        /* ── Drag: panel ── */
         const $handle = $('#fm-drag-handle');
         let isDragging = false;
         let offset = { x: 0, y: 0 };
-        
+
         function getCoords(e) {
             if (e.type.startsWith('touch') && e.touches && e.touches[0]) {
                 return { x: e.touches[0].clientX, y: e.touches[0].clientY };
             }
             return { x: e.clientX, y: e.clientY };
         }
-        
+
         $handle.on('mousedown touchstart', function(e) {
             isDragging = true;
             const pos = $panel.position();
@@ -588,22 +388,26 @@ jQuery(async () => {
             offset = { x: coords.x - pos.left, y: coords.y - pos.top };
             e.preventDefault();
         });
-        
+
         $(document).on('mousemove touchmove', function(e) {
             if (!isDragging) return;
             const coords = getCoords(e);
             $panel.css({ top: (coords.y - offset.y) + 'px', left: (coords.x - offset.x) + 'px' });
         });
-        
+
         $(document).on('mouseup touchend', function() {
             isDragging = false;
         });
 
+        /* ── Drag: mini button ── */
         let isMiniDragging = false;
         let miniOffset = { x: 0, y: 0 };
-        
+        let miniMoved = false;
+
         $miniBtn.on('mousedown touchstart', function(e) {
             isMiniDragging = true;
+            miniMoved = false;
+            miniClickAllowed = true;
             const pos = $miniBtn.position();
             $miniBtn.css({ top: pos.top + 'px', left: pos.left + 'px', right: 'auto', bottom: 'auto' });
             const coords = getCoords(e);
@@ -611,29 +415,35 @@ jQuery(async () => {
             e.preventDefault();
             e.stopPropagation();
         });
-        
+
         $(document).on('mousemove touchmove', function(e) {
             if (!isMiniDragging) return;
+            miniMoved = true;
+            miniClickAllowed = false;
             const coords = getCoords(e);
             $miniBtn.css({ top: (coords.y - miniOffset.y) + 'px', left: (coords.x - miniOffset.x) + 'px' });
             e.preventDefault();
         });
-        
+
         $(document).on('mouseup touchend', function() {
-            isMiniDragging = false;
+            if (isMiniDragging) {
+                isMiniDragging = false;
+                if (miniMoved) {
+                    setTimeout(() => { miniClickAllowed = true; }, 50);
+                }
+            }
         });
-        
+
         updateUI();
         apply();
-        
-        // Обновляем промпт (с новым броском) перед каждым сообщением пользователя
+
         eventSource.on(event_types.MESSAGE_SENT, () => {
             console.log('[Fetish Manager] New roll before AI response...');
             apply();
         });
-        
-        console.log('[Fetish Manager] v11 Ready!');
-        
+
+        console.log('[Fetish Manager] v12 Ready!');
+
     } catch (error) {
         console.error('[Fetish Manager] Error:', error);
     }

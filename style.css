@@ -1,261 +1,393 @@
 /**
- * ST-Fetish-Manager Styles
+ * Fetish Manager v12 — Fully theme-adaptive styles
+ * All colors inherit from SillyTavern's CSS custom properties.
  */
 
-/* Панель */
-.fetish-panel {
+/* ═══════════════════════════════════════
+   Floating mini-button
+   ═══════════════════════════════════════ */
+.fm-mini-btn {
     position: fixed;
-    top: 50px;
-    right: 20px;
-    width: 320px;
-    max-height: 80vh;
-    background: var(--SmartThemeBlurTintColor, rgba(25, 25, 25, 0.95));
-    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
-    border-radius: 12px;
     z-index: 99999;
-    overflow: hidden;
+    top: 120px;
+    right: 15px;
+    width: 44px;
+    height: 44px;
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.9));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    align-items: center;
+    justify-content: center;
+    color: var(--SmartThemeBodyColor, #eee);
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.fm-mini-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.fm-mini-btn .fm-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--SmartThemeQuoteColor, #c0392b);
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-weight: 700;
+    line-height: 1.4;
 }
 
-.fetish-panel.hidden {
+/* ═══════════════════════════════════════
+   Main panel
+   ═══════════════════════════════════════ */
+.fm-container {
+    position: fixed;
+    z-index: 99999;
+    top: 50px;
+    right: 15px;
+    width: 280px;
+    max-height: 70vh;
+    background: var(--SmartThemeBlurTintColor, rgba(25, 25, 30, 0.97));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.12));
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    font-size: 13px;
+    color: var(--SmartThemeBodyColor, #eee);
+    overflow: hidden;
+}
+.fm-container.fm-hidden {
     display: none;
 }
 
-/* Хедер */
-.fetish-header {
+/* Header */
+.fm-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 15px;
-    background: linear-gradient(135deg, rgba(180, 50, 80, 0.3), rgba(120, 40, 60, 0.2));
+    padding: 10px 12px;
+    background: color-mix(in srgb, var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.8)) 85%, var(--SmartThemeBorderColor, #888));
     border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
 }
-
-.fetish-header h4 {
+.fm-header h4 {
     margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: move;
+    flex-grow: 1;
+    text-align: center;
     color: var(--SmartThemeBodyColor, #fff);
-    font-size: 1em;
 }
-
-.fetish-minimize-btn {
+.fm-header h4 i {
+    margin-right: 5px;
+    opacity: 0.85;
+}
+.fm-minimize-btn {
     background: none;
     border: none;
     color: var(--SmartThemeBodyColor, #fff);
+    font-size: 16px;
     cursor: pointer;
-    padding: 5px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    padding: 5px 8px;
+    opacity: 0.6;
+    transition: opacity 0.15s;
 }
-
-.fetish-minimize-btn:hover {
+.fm-minimize-btn:hover {
     opacity: 1;
 }
 
-/* Контролы */
-.fetish-controls {
-    padding: 10px 15px;
-    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+/* Scrollable body */
+.fm-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.fm-scrollable::-webkit-scrollbar { width: 4px; }
+.fm-scrollable::-webkit-scrollbar-thumb {
+    background: var(--SmartThemeBorderColor, rgba(120, 120, 140, 0.4));
+    border-radius: 2px;
+}
+
+/* Controls */
+.fm-controls {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-
-.fetish-toggle {
+.fm-controls label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--SmartThemeBodyColor, #eee);
+    font-size: 13px;
+}
+.fm-row {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--SmartThemeBodyColor, #fff);
-    font-size: 0.9em;
-    cursor: pointer;
+    color: var(--SmartThemeBodyColor, #eee);
 }
-
-.fetish-intensity,
-.fetish-chance {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--SmartThemeBodyColor, #fff);
-    font-size: 0.85em;
-}
-
-.fetish-intensity select,
-.fetish-chance input {
+.fm-controls select,
+.fm-controls input[type="range"] {
     flex: 1;
-    background: var(--SmartThemeBlurTintColor, rgba(40, 40, 40, 0.8));
-    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.2));
-    border-radius: 4px;
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.8));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
     color: var(--SmartThemeBodyColor, #fff);
-    padding: 4px 8px;
+    padding: 4px 6px;
+    border-radius: 5px;
+}
+.fm-controls input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--SmartThemeQuoteColor, #c0392b);
 }
 
-/* Активные фетиши */
-.fetish-active {
-    padding: 10px 15px;
-    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+/* Active section */
+.fm-active-section {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
 }
-
-.active-header {
+.fm-section-header {
+    font-size: 11px;
+    opacity: 0.55;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--SmartThemeBodyColor, #eee);
+}
+#fm-active-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 24px;
+    color: var(--SmartThemeBodyColor, #eee);
+}
+.fm-tag {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #666) 40%, var(--SmartThemeBlurTintColor, #333));
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     color: var(--SmartThemeBodyColor, #fff);
-    font-size: 0.85em;
-    margin-bottom: 8px;
+    transition: background 0.15s;
+}
+.fm-tag:hover {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 55%, var(--SmartThemeBlurTintColor, #444));
+}
+.fm-tag .fm-tag-x {
+    font-size: 9px;
+    opacity: 0.5;
+    margin-left: 2px;
+}
+.fm-tag i:first-child {
+    font-size: 10px;
     opacity: 0.8;
 }
 
-.active-list {
+/* Custom section */
+.fm-custom-section {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
+}
+.fm-custom-section .fm-section-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    min-height: 28px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
 }
-
-.active-fetish-tag {
-    background: linear-gradient(135deg, rgba(180, 50, 80, 0.6), rgba(140, 40, 60, 0.5));
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.75em;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.active-fetish-tag:hover {
-    background: linear-gradient(135deg, rgba(200, 60, 90, 0.8), rgba(160, 50, 70, 0.7));
-}
-
-.no-fetishes {
+.fm-add-btn {
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.8));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
     color: var(--SmartThemeBodyColor, #fff);
-    opacity: 0.5;
-    font-size: 0.8em;
-    font-style: italic;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s;
 }
-
-/* Категории */
-.fetish-categories {
+.fm-add-btn:hover {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 30%, var(--SmartThemeBlurTintColor, #444));
+}
+.fm-add-btn i {
+    margin-right: 3px;
+}
+#fm-custom-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: var(--SmartThemeBodyColor, #eee);
+}
+.fm-custom-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.6));
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    color: var(--SmartThemeBodyColor, #eee);
+    transition: background 0.15s, border-color 0.15s;
+}
+.fm-custom-item:hover {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 20%, var(--SmartThemeBlurTintColor, #333));
+}
+.fm-custom-item.fm-custom-active {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 35%, var(--SmartThemeBlurTintColor, #333));
+    border-color: var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.2));
+}
+.fm-custom-name {
     flex: 1;
-    overflow-y: auto;
-    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.fm-custom-del {
+    opacity: 0.4;
+    padding: 2px 6px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+.fm-custom-del:hover {
+    opacity: 0.9;
 }
 
-.fetish-category {
+/* ═══════════════════════════════════════
+   Categories & fetish buttons
+   ═══════════════════════════════════════ */
+.fm-categories {
+    padding: 8px 12px;
+}
+.fm-category {
     margin-bottom: 12px;
 }
-
-.category-header {
-    color: var(--SmartThemeBodyColor, #fff);
-    font-size: 0.85em;
-    font-weight: bold;
-    margin-bottom: 8px;
-    padding-bottom: 4px;
-    border-bottom: 1px dashed var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.2));
+.fm-cat-header {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    opacity: 0.7;
+    padding-bottom: 3px;
+    border-bottom: 1px dashed var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.12));
+    color: var(--SmartThemeBodyColor, #eee);
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
-
-.category-fetishes {
+.fm-cat-header i {
+    font-size: 11px;
+    opacity: 0.75;
+}
+.fm-cat-items {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
-
-/* Кнопки фетишей */
-.fetish-btn {
-    display: flex;
+.fm-fetish-btn {
+    padding: 5px 9px;
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.7));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+    border-radius: 6px;
+    color: var(--SmartThemeBodyColor, #ddd);
+    font-size: 11px;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 6px 10px;
-    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 50, 0.7));
-    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.15));
-    border-radius: 6px;
-    color: var(--SmartThemeBodyColor, #fff);
-    font-size: 0.75em;
-    cursor: pointer;
-    transition: all 0.2s;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
-
-.fetish-btn:hover {
-    background: var(--SmartThemeBorderColor, rgba(80, 80, 80, 0.8));
+.fm-fetish-btn i {
+    font-size: 10px;
+    opacity: 0.7;
+}
+.fm-fetish-btn:hover {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 25%, var(--SmartThemeBlurTintColor, #444));
     transform: translateY(-1px);
 }
-
-.fetish-btn.active {
-    background: linear-gradient(135deg, rgba(180, 50, 80, 0.7), rgba(140, 40, 60, 0.6));
-    border-color: rgba(220, 80, 110, 0.6);
-    box-shadow: 0 0 10px rgba(180, 50, 80, 0.4);
-}
-
-.fetish-icon {
-    font-size: 1.1em;
-}
-
-.fetish-name {
-    white-space: nowrap;
-}
-
-/* Кнопка очистки */
-.fetish-clear-btn {
-    margin: 10px 15px;
-    padding: 8px;
-    background: rgba(80, 30, 30, 0.6);
-    border: 1px solid rgba(150, 50, 50, 0.4);
-    border-radius: 6px;
+.fm-fetish-btn.fm-active {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 45%, var(--SmartThemeBlurTintColor, #333));
+    border-color: var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.3));
+    box-shadow: 0 0 8px color-mix(in srgb, var(--SmartThemeBorderColor, #888) 30%, transparent);
     color: var(--SmartThemeBodyColor, #fff);
-    font-size: 0.85em;
+}
+.fm-fetish-btn.fm-active i {
+    opacity: 1;
+}
+
+/* Footer */
+.fm-footer {
+    padding: 8px 12px;
+    border-top: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
+}
+.fm-clear-btn {
+    width: 100%;
+    padding: 7px;
+    background: var(--SmartThemeBlurTintColor, rgba(50, 50, 60, 0.7));
+    border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.12));
+    border-radius: 6px;
+    color: var(--SmartThemeBodyColor, #eee);
     cursor: pointer;
-    transition: all 0.2s;
-}
-
-.fetish-clear-btn:hover {
-    background: rgba(120, 40, 40, 0.8);
-}
-
-/* Мини-кнопка */
-.fetish-mini-btn {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, rgba(180, 50, 80, 0.9), rgba(140, 40, 60, 0.8));
-    border-radius: 50%;
-    display: none;
+    font-size: 12px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5em;
-    cursor: pointer;
-    z-index: 99999;
-    box-shadow: 0 4px 15px rgba(180, 50, 80, 0.5);
-    transition: transform 0.2s;
+    gap: 5px;
+    transition: background 0.15s;
+}
+.fm-clear-btn:hover {
+    background: color-mix(in srgb, var(--SmartThemeBorderColor, #888) 30%, var(--SmartThemeBlurTintColor, #333));
 }
 
-.fetish-mini-btn:hover {
-    transform: scale(1.1);
+/* ═══════════════════════════════════════
+   Extension panel block
+   ═══════════════════════════════════════ */
+.fm-ext-block .inline-drawer-content {
+    padding: 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.fm-ext-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.fm-ext-badge {
+    background: var(--SmartThemeQuoteColor, #c0392b);
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+.fm-ext-badge:empty {
+    display: none;
 }
 
-/* Скроллбар */
-.fetish-categories::-webkit-scrollbar {
-    width: 4px;
-}
-
-.fetish-categories::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.fetish-categories::-webkit-scrollbar-thumb {
-    background: rgba(180, 50, 80, 0.5);
-    border-radius: 2px;
-}
-
-/* Мобильная адаптация */
+/* ═══════════════════════════════════════
+   Mobile
+   ═══════════════════════════════════════ */
 @media (max-width: 480px) {
-    .fetish-panel {
+    .fm-container {
         width: calc(100vw - 20px);
         right: 10px;
         left: 10px;
         max-height: 70vh;
     }
-    
-    .fetish-btn {
-        padding: 8px 12px;
-        font-size: 0.8em;
+    .fm-fetish-btn {
+        padding: 7px 11px;
+        font-size: 12px;
     }
 }
