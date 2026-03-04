@@ -53,9 +53,9 @@ function buildPrompt() {
     if (!state.enabled || !state.active.length) return '';
 
     const intensityMap = {
-        low: 'очень лёгкие намёки, едва заметно',
-        medium: 'умеренно, естественно вплетать',
-        high: 'ярко выражено, акцент на фетише'
+        low: 'very subtle hints, barely noticeable',
+        medium: 'moderate, naturally woven into the scene',
+        high: 'strongly expressed, heavy focus on the fetish'
     };
 
     let fetishList = [];
@@ -71,25 +71,24 @@ function buildPrompt() {
     const randomFetishKey = state.active[Math.floor(Math.random() * state.active.length)];
     const randomFetish = FETISHES[randomFetishKey] || state.custom.find(f => f.id === randomFetishKey);
 
-    let p = `[OOC: FETISH SYSTEM]
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-БРОСОК: ${roll} из 100 (порог: ${state.chance}%)
-${triggered ? `СРАБОТАЛО! Фетиш этого ответа: ${randomFetish?.name || randomFetishKey}` : `НЕ СРАБОТАЛО — пиши ВАНИЛЬНО (без фетишей)`}
+   let p = `[OOC: FETISH SYSTEM — STRICT COMPLIANCE REQUIRED]
+Roll: ${roll}/100 (threshold: ${state.chance}%)
+Result: ${triggered ? `TRIGGERED → apply "${randomFetish?.name || randomFetishKey}"` : `NOT TRIGGERED → write vanilla scene`}
+Intensity: ${state.intensity} (${intensityMap[state.intensity]})
 
-Интенсивность: ${state.intensity} (${intensityMap[state.intensity]})
-
-ВСЕ АКТИВНЫЕ ФЕТИШИ (для справки):
+Active fetishes for reference:
 ${fetishList.join('\n')}
 
-ПРАВИЛА:
 ${triggered
-    ? `• Интегрируй "${randomFetish?.name || randomFetishKey}" ЕСТЕСТВЕННО в сцену
-• НЕ объявляй фетиш словами, просто покажи через действия/диалог
-• Если контекст неподходящий (не интим) — добавь лёгкий намёк или отложи`
-    : `• Пиши ВАНИЛЬНУЮ сцену БЕЗ явных фетишей
-• Можно добавить ОЧЕНЬ лёгкий намёк, но не более
-• НЕ ФОРСЬ фетиши — бросок не прошёл!`}
-━━━━━━━━━━━━━━━━━━━━━━━━━━]
+    ? `RULES (fetish triggered):
+- Weave "${randomFetish?.name || randomFetishKey}" into the scene through actions, body language, dialogue subtext — never name the fetish explicitly
+- Match intensity level: low = fleeting micro-detail; medium = a recurring undercurrent; high = a central driver of the scene
+- If the current context is non-intimate, plant subtle foreshadowing or tension that hints at this fetish without forcing a sexual scene`
+    : `RULES (fetish NOT triggered):
+- Write a completely vanilla scene with zero fetish content
+- Do not sneak in hints, teasing, or "lite" versions — the roll failed, respect the result
+- Focus on character personality, plot progression, and emotional dynamics instead`}
+]
 `;
     return p;
 }
