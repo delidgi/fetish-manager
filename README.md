@@ -52,7 +52,7 @@ https://github.com/delidgi/fetish-manager
 Расширение полностью заменяет эту функциональность.
 
 ## Автор
-Tane4ka
+@MommyCat_SillyTavern
 
 ## Версия
-1.0.0
+1.8.0
