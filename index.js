@@ -31,7 +31,7 @@ const FETISHES = {
     roleplay: { name: "Ролеплей", icon: "fa-solid fa-masks-theater", cat: "sense", prompt: `[FETISH: Roleplay] {{char}} enjoys roles.` },
     petplay: { name: "Петплей", icon: "fa-solid fa-paw", cat: "sense", prompt: `[FETISH: Petplay] {{char}} enjoys pet play.` },
     aftercare: { name: "Aftercare", icon: "fa-solid fa-heart-pulse", cat: "rel", prompt: `[FETISH: Aftercare] {{char}} gives aftercare.` },
-    dirty_talk: { name: "Dirty Talk", icon: "fa-solid fa-comment-dots", cat: "rel", prompt: `[FETISH: Dirty Talk] {{char}} talks dirty.` },
+    dirty_talk: { name: "Грязные разговоры", icon: "fa-solid fa-comment-dots", cat: "rel", prompt: `[FETISH: Dirty Talk] {{char}} talks dirty.` },
     worship: { name: "Поклонение", icon: "fa-solid fa-hand-holding-heart", cat: "rel", prompt: `[FETISH: Worship] {{char}} worships partner.` }
 };
 
