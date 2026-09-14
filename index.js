@@ -1,4 +1,5 @@
 import { setExtensionPrompt, extension_prompt_types, eventSource, event_types } from '../../../../script.js';
+import { getContext } from '../../../extensions.js';
 
 const extensionName = 'fetish-manager';
 
@@ -44,10 +45,91 @@ const CATEGORIES = {
     rel: { name: "Отношения", icon: "fa-solid fa-heart-pulse" }
 };
 
-let state = { enabled: true, active: [], intensity: 'medium', chance: 70, custom: [], showFloating: true };
+const STORE_KEY = 'fm_v2';
+const LEGACY_KEY = 'fm';
 
-function load() { try { const s = localStorage.getItem('fm'); if(s) state = {...state, ...JSON.parse(s)}; } catch(e){} }
-function save() { localStorage.setItem('fm', JSON.stringify(state)); }
+// Generation types that must not consume a roll: /quiet is a background request,
+// impersonate writes the user's line, and continue extends a message that was
+// already written under the previous roll.
+const SKIP_ROLL_TYPES = ['quiet', 'impersonate', 'continue'];
+
+const DEFAULTS = { enabled: true, active: [], intensity: 'medium', chance: 70, custom: [] };
+
+// Settings are kept per character (per group in group chats). `template` is what a
+// character with no profile of its own starts from — the settings saved last.
+let store = { showFloating: true, template: { ...DEFAULTS }, profiles: {} };
+let profileKey = 'default';
+let state = { ...DEFAULTS, showFloating: true };
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+function load() {
+    try {
+        const raw = localStorage.getItem(STORE_KEY);
+        if (raw) {
+            store = { ...store, ...JSON.parse(raw) };
+        } else {
+            // migrate the old single global blob into the template
+            const legacy = localStorage.getItem(LEGACY_KEY);
+            if (legacy) {
+                const l = JSON.parse(legacy);
+                store.showFloating = l.showFloating !== false;
+                store.template = {
+                    enabled: l.enabled !== false,
+                    active: Array.isArray(l.active) ? l.active : [],
+                    intensity: l.intensity || 'medium',
+                    chance: Number.isFinite(l.chance) ? l.chance : 70,
+                    custom: Array.isArray(l.custom) ? l.custom : [],
+                };
+                console.log('[Fetish Manager] migrated legacy settings into a profile template');
+            }
+        }
+    } catch (e) {
+        console.error('[Fetish Manager] settings load failed:', e);
+    }
+    if (!store.profiles || typeof store.profiles !== 'object') store.profiles = {};
+    if (!store.template) store.template = { ...DEFAULTS };
+}
+
+function save() {
+    const snapshot = {
+        enabled: state.enabled,
+        active: [...state.active],
+        intensity: state.intensity,
+        chance: state.chance,
+        custom: clone(state.custom),
+    };
+    store.profiles[profileKey] = snapshot;
+    store.template = snapshot;
+    store.showFloating = state.showFloating;
+    try {
+        localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    } catch (e) {
+        console.error('[Fetish Manager] settings save failed:', e);
+    }
+}
+
+function profileId() {
+    try {
+        const ctx = getContext();
+        if (ctx.groupId) return 'group:' + ctx.groupId;
+        const avatar = ctx.characters?.[ctx.characterId]?.avatar;
+        if (avatar) return 'char:' + avatar;
+    } catch (e) { /* context not ready yet */ }
+    return 'default';
+}
+
+function profileName() {
+    try {
+        const ctx = getContext();
+        if (ctx.groupId) {
+            return ctx.groups?.find(g => String(g.id) === String(ctx.groupId))?.name || 'Группа';
+        }
+        return ctx.characters?.[ctx.characterId]?.name || 'Без персонажа';
+    } catch (e) {
+        return 'Без персонажа';
+    }
+}
 
 function buildPrompt() {
     if (!state.enabled || !state.active.length) return '';
@@ -74,11 +156,11 @@ function buildPrompt() {
    let p = `[OOC: FETISH SYSTEM — STRICT COMPLIANCE REQUIRED]
 Roll: ${roll}/100 (threshold: ${state.chance}%)
 Result: ${triggered ? `TRIGGERED → apply "${randomFetish?.name || randomFetishKey}"` : `NOT TRIGGERED → write vanilla scene`}
-Intensity: ${state.intensity} (${intensityMap[state.intensity]})
-
+${triggered ? `Intensity: ${state.intensity} (${intensityMap[state.intensity]})
+` : ''}${triggered ? `
 Active fetishes for reference:
 ${fetishList.join('\n')}
-
+` : ''}
 ${triggered
     ? `RULES (fetish triggered):
 - Weave "${randomFetish?.name || randomFetishKey}" into the scene through actions, body language, dialogue subtext — never name the fetish explicitly
@@ -109,6 +191,38 @@ function faIcon(cls, extra = '') {
     return `<i class="${cls}${extra ? ' ' + extra : ''}"></i>`;
 }
 
+function setRangeFill($el) {
+    const min = parseFloat($el.attr('min'));
+    const max = parseFloat($el.attr('max'));
+    const val = parseFloat($el.val());
+    $el[0].style.setProperty('--fm-fill', ((val - min) / (max - min) * 100) + '%');
+}
+
+function syncControls() {
+    $('#fm-enabled').prop('checked', state.enabled);
+    $('#fm-ext-show-float').prop('checked', state.showFloating);
+    $('#fm-mini-btn').toggle(!!state.showFloating);
+    $('#fm-chance').val(state.chance);
+    $('#fm-chance-val').text(state.chance);
+    setRangeFill($('#fm-chance'));
+    $('#fm-scope-name').text(profileName());
+}
+
+function switchProfile() {
+    profileKey = profileId();
+    const src = store.profiles[profileKey] || store.template || DEFAULTS;
+    state = { ...DEFAULTS, ...clone(src), showFloating: store.showFloating !== false };
+    syncControls();
+    updateUI();
+    apply();
+}
+
+function updateIntensityUI() {
+    $('#fm-intensity .fm-seg').each(function() {
+        $(this).toggleClass('fm-seg-on', $(this).data('val') === state.intensity);
+    });
+}
+
 function updateUI() {
     $('.fm-fetish-btn').each(function() {
         $(this).toggleClass('fm-active', state.active.includes($(this).data('key')));
@@ -116,20 +230,33 @@ function updateUI() {
     $('.fm-custom-item').each(function() {
         $(this).toggleClass('fm-custom-active', state.active.includes($(this).data('id')));
     });
+
     const count = state.active.length;
+
     $('#fm-mini-btn').html(count > 0
         ? `${faIcon('fa-solid fa-fire')}<span class="fm-count">${count}</span>`
         : faIcon('fa-solid fa-fire'));
-    // Update extension panel button counter too
+    $('#fm-mini-btn').toggleClass('fm-mini-on', count > 0);
+
     $('#fm-ext-count').text(count > 0 ? count : '');
+    $('#fm-title-count').text(count > 0 ? count : '');
+
+    // per-category counters: where the active picks actually sit
+    $('.fm-cat-count').each(function() {
+        const ck = $(this).data('cat');
+        const n = state.active.filter(k => FETISHES[k] && FETISHES[k].cat === ck).length;
+        $(this).text(n > 0 ? n : '');
+    });
+
     $('#fm-active-display').html(
         count > 0
             ? state.active.map(k => {
                 const f = FETISHES[k] || state.custom.find(c => c.id === k);
                 return f ? `<span class="fm-tag" data-key="${k}">${faIcon(f.icon || 'fa-solid fa-circle')} ${f.name} <i class="fa-solid fa-xmark fm-tag-x"></i></span>` : '';
             }).join('')
-            : '<em>Не выбрано</em>'
+            : '<span class="fm-empty">Не выбрано</span>'
     );
+    updateIntensityUI();
     renderCustomList();
 }
 
@@ -151,7 +278,7 @@ function toggle(key) {
 function renderCustomList() {
     const $list = $('#fm-custom-list');
     if (state.custom.length === 0) {
-        $list.html('<em>Нет кастомных</em>');
+        $list.html('<span class="fm-empty">Нет своих</span>');
     } else {
         $list.html(state.custom.map(f => `
             <div class="fm-custom-item ${state.active.includes(f.id) ? 'fm-custom-active' : ''}" data-id="${f.id}">
@@ -169,7 +296,7 @@ function buildCategoriesHtml() {
             .filter(([_, f]) => f.cat === ck)
             .map(([k, f]) => `<button class="fm-fetish-btn" data-key="${k}">${faIcon(f.icon)} ${f.name}</button>`)
             .join('');
-        html += `<div class="fm-category"><div class="fm-cat-header">${faIcon(c.icon)} ${c.name}</div><div class="fm-cat-items">${btns}</div></div>`;
+        html += `<div class="fm-category"><div class="fm-cat-header">${faIcon(c.icon)} <span>${c.name}</span><span class="fm-cat-count" data-cat="${ck}"></span></div><div class="fm-cat-items">${btns}</div></div>`;
     }
     return html;
 }
@@ -179,21 +306,25 @@ const extSettingsHtml = `
 <div id="fm-ext-settings" class="fm-ext-block">
     <div class="inline-drawer">
         <div class="inline-drawer-toggle inline-drawer-header">
-            <b>Fetish Manager</b>
-            <span id="fm-ext-count" class="fm-ext-badge"></span>
-            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+            <b class="fm-ext-title"><i class="fa-solid fa-fire"></i> Fetish Manager</b>
+            <div class="fm-ext-head-right">
+                <span id="fm-ext-count" class="fm-ext-badge"></span>
+                <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+            </div>
         </div>
         <div class="inline-drawer-content">
-            <div class="fm-ext-row">
-                <label class="checkbox_label">
-                    <input type="checkbox" id="fm-ext-show-float">
-                    <span>Плавающая кнопка</span>
+            <div class="fm-ext-body">
+                <label class="fm-switch-row">
+                    <span class="fm-switch">
+                        <input type="checkbox" id="fm-ext-show-float">
+                        <span class="fm-switch-track"></span>
+                    </span>
+                    <span class="fm-switch-label">Плавающая кнопка</span>
                 </label>
-            </div>
-            <div class="fm-ext-row">
-                <button id="fm-ext-open" class="menu_button">
-                    <i class="fa-solid fa-fire"></i> Открыть панель
-                </button>
+                <div id="fm-ext-open" class="menu_button menu_button_icon fm-ext-open">
+                    <i class="fa-solid fa-fire"></i>
+                    <span>Открыть панель</span>
+                </div>
             </div>
         </div>
     </div>
@@ -204,40 +335,54 @@ const extSettingsHtml = `
 const panelHtml = `
 <div id="fm-panel" class="fm-container fm-hidden">
     <div class="fm-header">
-        <h4 id="fm-drag-handle"><i class="fa-solid fa-fire"></i> Fetish Manager</h4>
-        <button id="fm-minimize" class="fm-minimize-btn"><i class="fa-solid fa-minus"></i></button>
+        <div id="fm-drag-handle" class="fm-title">
+            <i class="fa-solid fa-fire"></i>
+            <span>Fetish Manager</span>
+            <span id="fm-title-count" class="fm-title-count"></span>
+        </div>
+        <button id="fm-minimize" class="fm-icon-btn" title="Свернуть"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="fm-scrollable">
-        <div class="fm-controls">
-            <label class="checkbox_label"><input type="checkbox" id="fm-enabled" checked> Включено</label>
-            <div class="fm-row">
-                <span>Сила:</span>
-                <select id="fm-intensity">
-                    <option value="low">Слабо</option>
-                    <option value="medium" selected>Средне</option>
-                    <option value="high">Сильно</option>
-                </select>
+        <div class="fm-block">
+            <div class="fm-scope">
+                <i class="fa-solid fa-address-card"></i>
+                <span id="fm-scope-name">—</span>
             </div>
-            <div class="fm-row">
-                <span>Шанс: <b id="fm-chance-val">70</b>%</span>
-                <input type="range" id="fm-chance" min="10" max="100" value="70" step="10">
+            <label class="fm-switch-row">
+                <span class="fm-switch">
+                    <input type="checkbox" id="fm-enabled" checked>
+                    <span class="fm-switch-track"></span>
+                </span>
+                <span class="fm-switch-label">Включено</span>
+            </label>
+            <div class="fm-field">
+                <span class="fm-label">Сила</span>
+                <div class="fm-segmented" id="fm-intensity">
+                    <button type="button" class="fm-seg" data-val="low">Слабо</button>
+                    <button type="button" class="fm-seg" data-val="medium">Средне</button>
+                    <button type="button" class="fm-seg" data-val="high">Сильно</button>
+                </div>
+            </div>
+            <div class="fm-field">
+                <span class="fm-label">Шанс срабатывания <b id="fm-chance-val">70</b>%</span>
+                <input type="range" id="fm-chance" min="0" max="100" value="70" step="5">
             </div>
         </div>
-        <div class="fm-active-section">
-            <div class="fm-section-header">Активные:</div>
-            <div id="fm-active-display"><em>Не выбрано</em></div>
+        <div class="fm-block">
+            <div class="fm-label">Активные</div>
+            <div id="fm-active-display"><span class="fm-empty">Не выбрано</span></div>
         </div>
-        <div class="fm-custom-section">
-            <div class="fm-section-header">
-                <span>Кастомные:</span>
-                <button id="fm-add-custom" class="fm-add-btn"><i class="fa-solid fa-plus"></i> Добавить</button>
+        <div class="fm-block">
+            <div class="fm-label fm-label-row">
+                <span>Свои фетиши</span>
+                <button id="fm-add-custom" class="fm-ghost-btn"><i class="fa-solid fa-plus"></i> Добавить</button>
             </div>
-            <div id="fm-custom-list"><em>Нет кастомных</em></div>
+            <div id="fm-custom-list"><span class="fm-empty">Нет своих</span></div>
         </div>
         <div class="fm-categories" id="fm-categories"></div>
     </div>
     <div class="fm-footer">
-        <button id="fm-clear" class="fm-clear-btn"><i class="fa-solid fa-trash-can"></i> Очистить</button>
+        <button id="fm-clear" class="fm-clear-btn"><i class="fa-solid fa-eraser"></i> Снять все</button>
     </div>
 </div>
 
@@ -259,12 +404,11 @@ jQuery(async () => {
         function applyFloatVisibility() {
             $miniBtn.toggle(!!state.showFloating);
         }
-        $('#fm-ext-show-float').prop('checked', state.showFloating).on('change', function() {
+        $('#fm-ext-show-float').on('change', function() {
             state.showFloating = this.checked;
             applyFloatVisibility();
             save();
         });
-        applyFloatVisibility();
 
         /* ── Open panel from extension settings ── */
         $('#fm-ext-open').on('click', function(e) {
@@ -287,23 +431,24 @@ jQuery(async () => {
         });
 
         /* ── Controls ── */
-        $('#fm-enabled').prop('checked', state.enabled).on('change', function() {
+        $('#fm-enabled').on('change', function() {
             state.enabled = this.checked;
             apply();
             save();
         });
 
-        $('#fm-intensity').val(state.intensity).on('change', function() {
-            state.intensity = this.value;
+        $('#fm-intensity').on('click touchend', '.fm-seg', function(e) {
+            e.preventDefault();
+            state.intensity = $(this).data('val');
+            updateIntensityUI();
             apply();
             save();
         });
 
-        $('#fm-chance').val(state.chance);
-        $('#fm-chance-val').text(state.chance);
         $('#fm-chance').on('input', function() {
             state.chance = parseInt(this.value);
             $('#fm-chance-val').text(this.value);
+            setRangeFill($(this));
             apply();
             save();
         });
@@ -433,15 +578,21 @@ jQuery(async () => {
             }
         });
 
-        updateUI();
-        apply();
+        switchProfile();
 
-        eventSource.on(event_types.MESSAGE_SENT, () => {
-            console.log('[Fetish Manager] New roll before AI response...');
+        // Settings follow the open character / group.
+        eventSource.on(event_types.CHAT_CHANGED, () => {
+            switchProfile();
+        });
+
+        // Fresh roll before every generation — swipes and regenerations included.
+        // MESSAGE_SENT only fires for typed messages, so it never re-rolled those.
+        eventSource.on(event_types.GENERATION_AFTER_COMMANDS, (type, _params, dryRun) => {
+            if (dryRun || SKIP_ROLL_TYPES.includes(type)) return;
             apply();
         });
 
-        console.log('[Fetish Manager] v12 Ready!');
+        console.log('[Fetish Manager] v1.6 ready');
 
     } catch (error) {
         console.error('[Fetish Manager] Error:', error);
